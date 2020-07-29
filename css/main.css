@@ -156,7 +156,8 @@ span {
 
 .form__actions {
   position: relative;
-  display: flex;
+  display: inline-flex;
+  width: 100%;
   justify-content: space-around;
 }
 
@@ -176,8 +177,7 @@ input[type=button] {
   margin: 0.2rem 0.5rem;
   border-radius: 1rem;
   flex: 1;
-  flex-basis: 100px;
-  justify-content: space-between;
+  max-width: 400px;
 }
 
 input, select {
@@ -304,11 +304,15 @@ main {
 }
 
 .modal__actions {
-  display: flex;
+  display: inline-flex;
+  width: 100%;
+  justify-content: space-around
 }
 
 .modal__actions > * {
   flex: 1;
+  flex-direction: row;
+  max-width: 300px;
 }
 
 .modal__actions :first-child {
@@ -345,7 +349,6 @@ main {
   }
 
   .tododiv {
-    flex: 1;
     min-width: 120px;
     margin: 0.75rem;
   }
@@ -386,9 +389,14 @@ main {
   .modal__actions {
     margin-bottom: 0;
     line-height: 1.5;
+    flex-direction: column;
   }
 
   .modal__actions > * {
-    font-size: 0.75rem
+    font-size: 0.75rem;
+  }
+
+  div.form__actions {
+      flex-direction: column-reverse;
   }
 }
