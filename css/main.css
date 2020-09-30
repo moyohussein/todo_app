@@ -198,8 +198,18 @@ input:focus, select:focus {
 
 label {
   font-weight: bold;
-  margin: 0.5rem 0;
+  margin: 0.65rem;
   color: #093145;
+  display: inline-flex;
+  flex-direction: column;
+  width: 100%;
+  line-height: 1.5;
+}
+
+label > p {
+  padding-top: 1rem;
+  margin: 0;
+  text-align: right;
 }
 
 .btn--danger:focus,
@@ -243,10 +253,25 @@ main {
   align-items: center;
 }
 
+.todo-block > * {
+  text-align: center;
+  max-width: 25rem;
+  pointer-events: none;
+}
+
 .checkbox {
-  margin-right: 2rem;
-  cursor: pointer;
   position: absolute;
+  pointer-events: fill;
+  margin: 0;
+}
+
+.deleteBtn {
+  position: absolute;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  top: 0;
+  right: 0.35rem;
 }
 
 .tododiv {
@@ -259,6 +284,10 @@ main {
   position: relative;
   flex: 1;
   flex-basis: 200px;
+}
+
+.deleteBtn {
+  pointer-events: fill;
 }
 
 .elementLabel .btn {

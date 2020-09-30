@@ -2,8 +2,7 @@
 const btn = document.querySelector('.header--button');
 const cancelBtn = document.querySelector('.form__actions--cancel');
 const welcomeText = document.querySelector('p.welcome-text');
-const toggle = document.querySelector('.form');
-const form = document.querySelector('form');
+const form = document.querySelector('.form');
 const main = document.querySelector('main');
 const addTodo = document.querySelector('.todo-list');
 const formText = document.querySelector('#todotext');
@@ -14,128 +13,152 @@ const selectBox = document.getElementsByClassName('checkbox');
 const modal = document.querySelector('.modal');
 const noBtn = document.querySelector('.modal__actions-btn--passive');
 const yesBtn = document.querySelector('.modal__actions-btn--danger');
-
+const deleteBtn = document.getElementsByClassName('deleBtn');
 
 // functions
 function addVisibleClass () {
-    toggle.classList.add('visible');
-}
+    form.classList.add('visible');
+};
 
-function removeVisibleClass (){
-    toggle.classList.remove('visible');
-}
+function removeVisibleClass () {
+    form.classList.remove('visible');
+};
 
 function removeHiddenClass () {
     modal.classList.remove('hidden');
+};
+
+function aBlur () {
     main.style.filter = 'blur(5px)';
-    disableCheckbox();
-}
+};
+
+function unBlur () {
+    main.style.setProperty('filter', 'blur(0)');
+};
+
+function addHiddenClass() {
+    modal.classList.add('hidden');
+};
 
 function disableCheckbox () {
     for (let i = 0; i < selectBox.length; i++) {
         selectBox[i].disabled = true;
-    }
-}
+    };
+};
 
 function enableCheckbox () {
     for (let i = 0; i < selectBox.length; i++) {
         selectBox[i].disabled = false;
-    }
-}
+    };
+};
+
+function showDeletBtn () {
+    document.querySelectorAll('.deleteBtn').forEach(item => item.style.display = 'block');
+};
+
+function hideDeleteBtn () {
+    document.querySelectorAll('.deleteBtn').forEach(item => item.style.display = 'none');
+};
 
 function changeState () {
     btn.textContent = `➖`;
     welcomeText.textContent = `Click the "➖" button to delete tasks`;
-    btn.removeEventListener('click', addVisibleClass);
-    btn.addEventListener('click', removeHiddenClass);
-}
+};
 
 function returnState () {
     btn.textContent = `✜`;
     welcomeText.textContent = `Click the "✜" to add a task`;
-}
+};
 
-function addDiv (event) {
-    event.preventDefault();
-    removeVisibleClass();
-    const newDiv = document.createElement('div');
-    newDiv.classList.add('tododiv');
-    const checkbox = document.createElement('input');
-    checkbox.classList.add('checkbox')
-    checkbox.type = "checkbox"; 
-    checkbox.name = "id"; 
-    checkbox.value = "value"; 
-    checkbox.id = "id";
-    checkbox.disabled = true;
-    checkbox.addEventListener('click', changeState);
-    const label = document.createElement('label');
-    label.classList.add('elementLabel');
-    label.htmlFor = "id";
-    const descriptionList = document.createElement('dl');
-    const listItem = document.createElement('dt');
-    const listDetail = document.createElement('dd');
-    const deleteBtn = document.createElement('button');
-    deleteBtn.classList.add('btn');
-    listItem.textContent= `${formText.value.toUpperCase()}`;
-    listDetail.textContent = 
-    `${formDate.value}`;
-    deleteBtn.textContent= `➖`;
-    myDiv.appendChild(newDiv);
-    newDiv.appendChild(checkbox);
-    newDiv.appendChild(label);
-    label.appendChild(descriptionList);
-    descriptionList.appendChild(listItem);
-    descriptionList.appendChild(listDetail);
-    label.appendChild(deleteBtn);
+function disablePointerEvents () {
+    btn.style.pointerEvents = 'none';
+};
 
-    if (myDiv.childElementCount > 0) {
-        checkbox.disabled = false;
-    }
+function enablePointerEvents () {
+    btn.style.pointerEvents = 'fill';
+};
 
-    (formPriority.value === 'high') ? (newDiv.style.borderTop = '10px solid red') :
-    (formPriority.value === 'medium') ? (newDiv.style.borderTop = '10px solid blue') :
-    (formPriority.value === 'low') ? (newDiv.style.borderTop = '10px solid yellow') : (newDiv.style.borderTop = '10px solid transparent');
+function toggleBtn() {
+    btn.textContent === '✜' ? (addVisibleClass(), disablePointerEvents(),disableCheckbox()) : 
+    (removeHiddenClass(), aBlur(), returnState(), disablePointerEvents(), disableCheckbox());
+};
 
-    function removeDivElement() {
-        newDiv.remove();
-    }
+function checkCheckedBoxes() {
+    [...selectBox].filter((item, i) => {
+        if (item.checked === true) {
+            [...myDiv.childNodes][i].remove();
+        };
+    });
+};
 
-    function addHiddenClass() {
-        modal.classList.add('hidden');
-        main.style.setProperty('filter', 'blur(0)');
-        enableCheckbox();
-        btn.removeEventListener('click', removeHiddenClass);
-        btn.addEventListener('click', returnState);
-        btn.addEventListener('click', addVisibleClass);
-    }
+function addBorderTop () {
+    myDiv.childNodes.forEach(elem => {
+        (formPriority.value === 'high') ? (elem.style.borderTop = '10px solid red') :
+        (formPriority.value === 'medium') ? (elem.style.borderTop = '10px solid blue') :
+        (formPriority.value === 'low') ? (elem.style.borderTop = '10px solid yellow') : (elem.style.borderTop = '10px solid transparent');
+    });
+};
 
-    function checkCheckedBoxes() {
-        addHiddenClass();
-        main.style.setProperty('filter', 'blur(0)');
-        let checkedBox = document.querySelectorAll('.checkbox');
-        let newtodoDiv = document.querySelectorAll('.tododiv');
-        for (let i = 0; i < checkedBox.length; i++) {
-            if (checkedBox[i].checked) {
-                 newtodoDiv[i].remove();
-                 console.log("removed");
+function addDiv () {
+    myDiv.innerHTML +=  
+    `<div class='newDiv tododiv'>
+        <input type='checkbox' id='id' class='checkbox' value='value' disabled=true>
+        <label for='id'>
+        <h3>${formText.value.toUpperCase()}</h3>
+        <p>${formDate.value}</p>
+        <button class='deleteBtn btn'>➖</button>
+        </label>
+    </div>`;
+
+    document.querySelectorAll('.newDiv').forEach((item, i) => item.addEventListener('click', (e) => {
+        const clickedBtn = e.target;
+        if (clickedBtn.classList.contains('deleteBtn')) {
+            [...myDiv.childNodes][i].remove();
+        };
+
+        if (clickedBtn.classList.contains('checkbox')) {
+            changeState();
+            hideDeleteBtn();
+
+            if (document.querySelectorAll('input[type=checkbox]:checked').length === 0)  {
+                returnState();
+                showDeletBtn();
             }
-            enableCheckbox();
-        }
-        btn.removeEventListener('click', removeHiddenClass);
-        btn.addEventListener('click', returnState);
-        btn.addEventListener('click', addVisibleClass);
-    }
-
-    deleteBtn.addEventListener('click', removeDivElement);
-
-    noBtn.addEventListener('click', addHiddenClass);
-
-    yesBtn.addEventListener('click', checkCheckedBoxes);
+        };      
+    }));
 };
 
 // eventlisteners
-btn.addEventListener('click', addVisibleClass);
+btn.addEventListener('click', toggleBtn);
 
-cancelBtn.addEventListener('click', removeVisibleClass);
+cancelBtn.addEventListener('click', () => {
+    removeVisibleClass();
+    enablePointerEvents();
+    enableCheckbox();
+});
 
-form.addEventListener('submit', addDiv);
+form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    addDiv();
+    addBorderTop();
+    enableCheckbox();
+    addHiddenClass();
+    removeVisibleClass();
+    enablePointerEvents();
+});
+
+noBtn.addEventListener('click', () => {
+    addHiddenClass();
+    unBlur();
+    enablePointerEvents();
+    enableCheckbox();
+});
+
+yesBtn.addEventListener('click', () => {
+    checkCheckedBoxes();
+    unBlur();
+    addHiddenClass();
+    showDeletBtn();
+    enablePointerEvents();
+    enableCheckbox();
+});
